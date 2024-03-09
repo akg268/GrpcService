@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+option java_package = "com.bank.management";
+option java_multiple_files = true;
+option java_outer_classname = "DemoRequest";
+package com.demo.definitions;
+
+message AccountRequest{
+  Header header =1;
+  Customer body =2;
+}
+message Header{
+  string x_message_id =1;
+  string trace_id =2;
+  map<string,string> metadata =3;
+}
+message Customer {
+  string firstName = 1;
+  string lastName = 2;
+  string fullName = 3;
+  int32 age = 4;
+  Address address = 5;
+  repeated Account accounts =6;
+}
+
+message Address {
+  string streetName = 1;
+  int32 streetNumber = 2;
+  string city =3;
+  string state = 4;
+  string country = 5;
+  string postalCode = 6;
+}
+
+message Account {
+  string accountId =1;
+  AccountTypes type = 2;
+  string lastFour = 3;
+  string routingNumber = 4;
+  string nickName = 5;
+}
+enum AccountTypes{
+  BANK_CHECKING = 0;
+  BANK_SAVINGS = 1;
+  CREDIT_CARD =2;
+  HOME_LOAN =3;
+  AUTO_LOAN =4;
+}
+message AccountResponse{
+  bool operationStatus = 1;
+  int32 customerId =2;
+  string customerFullName =3;
+}

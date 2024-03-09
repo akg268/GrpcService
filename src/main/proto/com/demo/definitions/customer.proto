@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_package = "com.bank.management";
+option java_multiple_files = true;
+option java_outer_classname = "DemoCustomer";
+package com.demo.service;
+
+import "com/demo/definitions/domain.proto";
+
+service CustomerAccountsManager{
+  rpc createCustomerAndAccounts(com.demo.definitions.AccountRequest) returns (com.demo.definitions.AccountResponse);
+}

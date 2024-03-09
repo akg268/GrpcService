@@ -1,0 +1,66 @@
+plugins {
+    id 'java'
+    id 'com.google.protobuf' version '0.8.18'
+    id 'idea'
+    id 'application'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+def grpcVersion = '1.62.2'
+def protobufVersion = '3.25.1'
+def protocVersion = protobufVersion
+
+group 'com.demo.bank.management'
+version '1.0.0'
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+}
+tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
+
+application {
+    mainClass = "org.example.Main"
+}
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+    implementation "io.grpc:grpc-stub:${grpcVersion}"
+    runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
+    implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+    implementation "io.grpc:grpc-services:${grpcVersion}"
+    compileOnly "org.apache.tomcat:annotations-api:6.0.53" // necessary for Java 9+
+}
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:${protocVersion}" }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+        doc { artifact = "io.github.pseudomuto:protoc-gen-doc:1.5.1" }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+            doc {
+                option 'html,bankmanagementdemo.html'
+            }
+        }
+    }
+}
+
+// Inform IDEs like IntelliJ IDEA, Eclipse or NetBeans about the generated code.
+sourceSets {
+    main {
+        java {
+            // protoc-gen-grpc-java outputdir
+            srcDirs 'build/generated/source/proto/main/grpc'
+            // protoc outputdir
+            srcDirs 'build/generated/source/proto/main/java'
+            // protoc-gen-doc outputdir
+            srcDirs 'build/generated/source/proto/main/doc'
+        }
+    }
+}
